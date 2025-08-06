@@ -5,6 +5,8 @@ import { ProjectFooter } from '@/components/project/ProjectFooter';
 import { ProjectHeader } from './ProjectHeader';
 import { ProjectsToolbar } from './ProjectsToolbar';
 import { ProjectList } from './ProjectList';
+import { useState } from 'react';
+import { NewProjectModal } from './ProjectModal';
 
 
 
@@ -18,7 +20,10 @@ export function ProjectSidebar() {
     searchTerm,
     setSearchTerm,
     handleDeleteProject,
+    handleCreateProject,
   } = useProjectsContext();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
 
   return (
@@ -31,7 +36,13 @@ export function ProjectSidebar() {
 
       <ProjectsToolbar
         projectCount={projects.length}
-        onNewProjectClick={() => console.log('Novo projeto clicado!')}
+        onNewProjectClick={() => setIsModalOpen(true)}
+      />
+
+      <NewProjectModal 
+        isOpen={isModalOpen} 
+        onOpenChange={setIsModalOpen} 
+        onCreate={handleCreateProject}
       />
 
       <div className="flex-1 overflow-y-auto">

@@ -1,6 +1,6 @@
 import { createContext, useContext, type ReactNode } from 'react';
 import { useProjects } from '@/hooks/useProjects';
-import type { Project, StatusCounts } from '@/types';
+import type { CreateProjectDto, Project, StatusCounts } from '@/types';
 
 interface ProjectsContextValue {
   projects: Project[];
@@ -10,6 +10,7 @@ interface ProjectsContextValue {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   handleDeleteProject: (projectId: string) => Promise<void>;
+  handleCreateProject: (data: CreateProjectDto) => Promise<void>;
 }
 
 const ProjectsContext = createContext<ProjectsContextValue | undefined>(

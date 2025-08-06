@@ -15,8 +15,7 @@ export function ProjectsToolbar({ projectCount, onNewProjectClick }: ProjectsToo
       </h2>
       <Button
         size="sm"
-        className="cursor-pointer shadow-sm hover:bg-green-700 hover:text-white"
-        variant="outline"
+        className="cursor-pointer shadow-sm"
         onClick={onNewProjectClick}
       >
         <Plus className="mr-2 h-4 w-4" />

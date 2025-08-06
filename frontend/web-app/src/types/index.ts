@@ -1,7 +1,11 @@
 import type { Geometry } from 'geojson';
 
 
-export type ProjectStatus = "Active" | "Finished" | "Pending";
+export enum ProjectStatus {
+  ACTIVE = "Active",
+  FINISHED = "Finished",
+  PENDING = "Pending",
+}
 
 export type Project = {
   id: string;

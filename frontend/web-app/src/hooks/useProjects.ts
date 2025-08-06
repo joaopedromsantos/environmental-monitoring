@@ -1,11 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Project, StatusCounts } from '@/types';
-import { deleteProject, getProjects } from '@/services/project.service';
-
+import type { CreateProjectDto, Project, StatusCounts } from '@/types';
+import {
+  createProject,
+  deleteProject,
+  getProjects,
+} from '@/services/project.service';
+import { toast } from 'sonner';
 
 export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [statusCounts, setStatusCounts] = useState<StatusCounts>({ Active: 0, Pending: 0, Finished: 0 });
+  const [statusCounts, setStatusCounts] = useState<StatusCounts>({
+    Active: 0,
+    Pending: 0,
+    Finished: 0,
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,22 +38,47 @@ export function useProjects() {
     }, 500);
 
     return () => {
-      clearTimeout(handler); 
+      clearTimeout(handler);
     };
   }, [searchTerm, fetchProjects]);
 
-   const handleDeleteProject = async (projectId: string) => {
+  const handleDeleteProject = async (projectId: string) => {
     try {
       await deleteProject(projectId);
-      getProjects(searchTerm).then(response => {
-        setProjects(response.data);
-        setStatusCounts(response.statusCounts);
-        });
-      console.log('Projeto deletado com sucesso');
+      await fetchProjects();
+      toast.success('Projeto deletado!', {
+        description: 'O projeto foi removido com sucesso.',
+      });
     } catch (error) {
-      console.error('Falha ao deletar o projeto:', error);
+      toast.error('Erro ao deletar', {
+        description: 'Não foi possível deletar o projeto. Tente novamente.',
+      });
     }
   };
 
-  return { projects, statusCounts, isLoading, error, searchTerm, setSearchTerm, handleDeleteProject };
+  const handleCreateProject = async (data: CreateProjectDto) => {
+    try {
+      await createProject(data);
+      await fetchProjects();
+      toast.success('Projeto criado com sucesso!', {
+        description: `O projeto "${data.name}" foi adicionado.`,
+      });
+    } catch (error) {
+      toast.error('Erro ao criar projeto', {
+        description: 'Não foi possível salvar o projeto. Verifique os dados.',
+      });
+      throw error;
+    }
+  };
+
+  return {
+    projects,
+    statusCounts,
+    isLoading,
+    error,
+    searchTerm,
+    setSearchTerm,
+    handleDeleteProject,
+    handleCreateProject,
+  };
 }
