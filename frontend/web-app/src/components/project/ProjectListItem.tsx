@@ -17,7 +17,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-
 interface ProjectListItemProps {
   project: Project;
   onSelect: (project: Project) => void;
@@ -29,7 +28,6 @@ export function ProjectListItem({
   onSelect,
   onDelete,
 }: ProjectListItemProps) {
-
   return (
     <Card
       key={project.id}
@@ -52,7 +50,7 @@ export function ProjectListItem({
                   variant="destructiveGhost"
                   size="icon"
                   onClick={(e) => e.stopPropagation()}
-                  className="h-6 w-6 cursor-pointer p-0"
+                  className="h-6 w-6 p-0"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -70,8 +68,12 @@ export function ProjectListItem({
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel className="cursor-pointer">Cancelar</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => onDelete(project.id)} className="cursor-pointer">
+                  <AlertDialogCancel>
+                    Cancelar
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => onDelete(project.id)}
+                  >
                     Sim, excluir projeto
                   </AlertDialogAction>
                 </AlertDialogFooter>

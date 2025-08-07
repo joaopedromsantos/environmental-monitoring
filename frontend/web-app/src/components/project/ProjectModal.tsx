@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -31,6 +32,9 @@ import {
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { ProjectStatus, type CreateProjectDto } from '@/types';
+import { MapPin } from 'lucide-react';
+import { toast } from 'sonner';
+import { useProjectsContext } from '@/contexts/ProjectsContext';
 
 interface NewProjectModalProps {
   isOpen: boolean;
@@ -43,44 +47,48 @@ export function NewProjectModal({
   onOpenChange,
   onCreate,
 }: NewProjectModalProps) {
-  const form = useForm({
+  const { drawnGeometry, setDrawnGeometry, setIsDrawingOnMap } =
+    useProjectsContext();
+
+  const form = useForm<CreateProjectFormData>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
       name: '',
       responsibleResearcher: '',
       status: ProjectStatus.PENDING,
-      latitude: '0.0',
-      longitude: '0.0',
     },
   });
 
+  useEffect(() => {
+    if (drawnGeometry) {
+      form.setValue('geometry', drawnGeometry);
+      setDrawnGeometry(null);
+      onOpenChange(true);
+    }
+  }, [drawnGeometry, form, setDrawnGeometry, onOpenChange]);
+
   const onSubmit = async (data: CreateProjectFormData) => {
-    form.reset();
     try {
-      const payload: CreateProjectDto = {
-        name: data.name,
-        status: data.status,
-        responsibleResearcher: data.responsibleResearcher,
-        geometry: {
-          type: 'Point',
-          coordinates: [parseFloat(data.longitude), parseFloat(data.latitude)],
-        },
-      };
-
-      await onCreate(payload);
-
+      await onCreate(data);
       onOpenChange(false);
       form.reset();
-    } catch (error) {
-      console.error('Falha ao criar projeto:', error);
+    } catch {
+      toast.error('Erro ao criar projeto. Tente novamente.');
     }
-    console.log('Dados do projeto:', data);
-    onOpenChange(false);
   };
 
-  const handleCancel = () => {
+  const handleModalStateChange = (open: boolean) => {
+    onOpenChange(open);
+    if (!open) {
+      setIsDrawingOnMap(false);
+      setDrawnGeometry(null);
+      form.reset();
+    }
+  };
+
+  const handleDrawClick = () => {
+    setIsDrawingOnMap(true);
     onOpenChange(false);
-    form.reset();
   };
 
   return (
@@ -167,51 +175,28 @@ export function NewProjectModal({
               )}
             />
 
-            <div className="flex gap-4">
-              <FormField
-                control={form.control}
-                name="latitude"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Latitude</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: 40.7890" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="longitude"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Longitude</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Ex: -23.5546"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleDrawClick}
+            >
+              <MapPin className="mr-2 h-4 w-4" />
+              {form.watch('geometry')
+                ? 'Área Definida (Clique para redesenhar)'
+                : 'Desenhar Área no Mapa'}
+            </Button>
 
             <DialogFooter>
               <Button
                 type="button"
-                className="cursor-pointer"
                 variant="outline"
-                onClick={handleCancel}
+                onClick={() => handleModalStateChange(false)}
               >
                 Cancelar
               </Button>
               <Button
-                type="submit"
-                className="cursor-pointer"
+                type="submit"                
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting ? 'Criando...' : 'Criar Projeto'}

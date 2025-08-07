@@ -1,15 +1,10 @@
 import { Search } from 'lucide-react';
 import { Input } from '../ui/input';
+import { useProjectsContext } from '@/contexts/ProjectsContext';
 
-interface ProjectHeaderProps {
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
-}
+export function ProjectHeader() {
+  const { searchTerm, setSearchTerm } = useProjectsContext();
 
-export function ProjectHeader({
-  searchTerm,
-  setSearchTerm,
-}: ProjectHeaderProps) {
   return (
     <div className="border-border border-b p-6">
       <h2 className="text-foreground mb-4 text-xl font-semibold">

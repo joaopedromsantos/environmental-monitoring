@@ -1,6 +1,7 @@
 import { createContext, useContext, type ReactNode } from 'react';
 import { useProjects } from '@/hooks/useProjects';
 import type { CreateProjectDto, Project, StatusCounts } from '@/types';
+import type { Geometry } from 'geojson';
 
 interface ProjectsContextValue {
   projects: Project[];
@@ -11,6 +12,12 @@ interface ProjectsContextValue {
   setSearchTerm: (term: string) => void;
   handleDeleteProject: (projectId: string) => Promise<void>;
   handleCreateProject: (data: CreateProjectDto) => Promise<void>;
+  isDrawingOnMap: boolean;
+  setIsDrawingOnMap: (isDrawing: boolean) => void;
+  drawnGeometry: Geometry | null;
+  setDrawnGeometry: (geometry: Geometry | null) => void;
+  selectedProject: Project | null;
+  setSelectedProject: (project: Project | null) => void;
 }
 
 const ProjectsContext = createContext<ProjectsContextValue | undefined>(

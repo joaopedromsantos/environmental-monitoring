@@ -6,6 +6,7 @@ import {
   getProjects,
 } from '@/services/project.service';
 import { toast } from 'sonner';
+import type { Geometry } from 'geojson';
 
 export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -17,6 +18,11 @@ export function useProjects() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [isDrawingOnMap, setIsDrawingOnMap] = useState(false);
+  const [drawnGeometry, setDrawnGeometry] = useState<Geometry | null>(null);
+
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const fetchProjects = useCallback(async () => {
     setIsLoading(true);
@@ -46,10 +52,9 @@ export function useProjects() {
     try {
       await deleteProject(projectId);
       await fetchProjects();
-      toast.success('Projeto deletado!', {
-        description: 'O projeto foi removido com sucesso.',
-      });
-    } catch (error) {
+      setSelectedProject(null);
+      toast.success('Projeto deletado com sucesso!');
+    } catch {
       toast.error('Erro ao deletar', {
         description: 'Não foi possível deletar o projeto. Tente novamente.',
       });
@@ -58,8 +63,9 @@ export function useProjects() {
 
   const handleCreateProject = async (data: CreateProjectDto) => {
     try {
-      await createProject(data);
+      const newProject = await createProject(data);
       await fetchProjects();
+      setSelectedProject(newProject);
       toast.success('Projeto criado com sucesso!', {
         description: `O projeto "${data.name}" foi adicionado.`,
       });
@@ -80,5 +86,11 @@ export function useProjects() {
     setSearchTerm,
     handleDeleteProject,
     handleCreateProject,
+    isDrawingOnMap,
+    setIsDrawingOnMap,
+    drawnGeometry,
+    setDrawnGeometry,
+    selectedProject,
+    setSelectedProject,
   };
 }

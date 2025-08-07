@@ -1,26 +1,17 @@
-import type { Project } from '@/types';
 import { ProjectListItem } from './ProjectListItem';
+import { useProjectsContext } from '@/contexts/ProjectsContext';
 
-
-interface ProjectListProps {
-  projects: Project[];
-  onDelete: (projectId: string) => Promise<void>;
-}
-
-export function ProjectList({ projects, onDelete }: ProjectListProps) {
-  const handleSelectProject = (project: Project) => {
-    console.log('Projeto selecionado:', project.name);
-  };
-
-
+export function ProjectList() {
+  const { projects, handleDeleteProject, setSelectedProject } =
+    useProjectsContext();
   return (
     <div className="flex-1 space-y-3 overflow-y-auto px-4 pb-4">
       {projects.map((project) => (
         <ProjectListItem
           key={project.id}
           project={project}
-          onSelect={handleSelectProject}
-          onDelete={onDelete}
+          onSelect={setSelectedProject}
+          onDelete={handleDeleteProject}
         />
       ))}
     </div>

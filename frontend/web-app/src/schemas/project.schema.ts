@@ -13,31 +13,9 @@ export const createProjectSchema = z.object({
     .max(60, 'O nome do pesquisador não pode ter mais de 60 caracteres.'),
 
   status: z.enum(ProjectStatus),
-
-  latitude: z
-    .string()
-    .min(1, 'Latitude é obrigatória.')
-    .max(10, 'Latitude não pode ter mais de 10 caracteres.')
-    .transform((val) => val.replace(',', '.'))
-    .refine((val) => !isNaN(Number(val)), {
-      message: 'Latitude deve ser um número válido.',
-    })
-    .refine((num) => Math.abs(Number(num)) <= 90, {
-      message: 'Latitude deve estar entre -90 e 90.',
-    }),
-
-  longitude: z
-    .string()
-    .min(1, 'Longitude é obrigatória.')
-    .max(10, 'Longitude não pode ter mais de 10 caracteres.')
-    .transform((val) => val.replace(',', '.'))
-    .refine((val) => !isNaN(Number(val)), {
-      message: 'Longitude deve ser um número válido.',
-    })
-    .refine((num) => Math.abs(Number(num)) <= 180, {
-      message: 'Deve estar entre -180 e 180',
-    }),
-    
+  geometry: z.any().refine((val) => val && val.type && val.coordinates, {
+    message: 'Geometria inválida. Por favor, desenhe no mapa.',
+  }),
 });
 
 export type CreateProjectFormData = z.infer<typeof createProjectSchema>;
