@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { CreateProjectDto, Project, ProjectsApiResponse } from '@/types';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3000/api/',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 export const getProjects = async (
