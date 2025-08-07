@@ -8,7 +8,7 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') || 3000;
-  const corsOrigin = configService.get<number>('CORS_ORIGIN') || 'http://localhost:3000';
+  const corsOrigin = configService.get<string>('CORS_ORIGIN') || 'http://localhost:3000';
 
   app.setGlobalPrefix('api');
 
@@ -28,6 +28,6 @@ async function bootstrap() {
   await app.listen(port);
 }
 bootstrap().catch((error) => {
-  console.error('Falha ao iniciar a aplicação', error);
+  console.error('Failed to start the application', error);
   process.exit(1);
 });

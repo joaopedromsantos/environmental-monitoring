@@ -15,7 +15,6 @@ import { Project } from './projects/entities/project.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        // Verifica se a aplicação está no ambiente de desenvolvimento
         const isDevelopment = configService.get('NODE_ENV') === 'development';
 
         if (isDevelopment) {
