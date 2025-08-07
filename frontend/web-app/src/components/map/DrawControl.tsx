@@ -4,6 +4,8 @@ import { EditControl } from 'react-leaflet-draw';
 import { useEffect, useRef } from 'react';
 import circle from '@turf/circle';
 import L from 'leaflet';
+import { DefaultIcon } from '@/utils/defaultLeafletIcon'
+
 
 export function DrawControl() {
   const { isDrawingOnMap, setIsDrawingOnMap, setDrawnGeometry, drawnGeometry } =
@@ -29,7 +31,7 @@ export function DrawControl() {
       const options = { steps: 64, units: 'meters' as const };
       const circlePolygon = circle([center.lng, center.lat], radius, options);
       newGeometry = circlePolygon.geometry;
-      
+
     } else {
       newGeometry = layer.toGeoJSON().geometry;
     }
@@ -46,7 +48,9 @@ export function DrawControl() {
           draw={{
             rectangle: false,
             circle: true,
-            marker: true,
+            marker: {
+                icon: DefaultIcon,
+            },
             polygon: true,
             polyline: false,
             circlemarker: false,
