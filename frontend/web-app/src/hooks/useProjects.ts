@@ -24,6 +24,8 @@ export function useProjects() {
 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   const fetchProjects = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -92,5 +94,7 @@ export function useProjects() {
     setDrawnGeometry,
     selectedProject,
     setSelectedProject,
+    isCollapsed,
+    setIsCollapsed,
   };
 }

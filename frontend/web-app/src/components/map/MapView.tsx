@@ -4,12 +4,15 @@ import { Spinner } from '../ui/Spinner';
 import { MapController } from './MapController';
 import { DrawControl } from './DrawControl';
 import { ProjectLayers } from './ProjectLayers';
+import { MapResizer } from './MapResizer';
 
 export function MapView() {
-  const { isLoading } = useProjectsContext();
+  const { isLoading, isCollapsed } = useProjectsContext();
+
+  
 
   return (
-    <div className="relative z-10 flex-1">
+    <div className="relative z-10 flex-1" >
       <MapContainer
         center={[-15, -50]}
         zoom={4}
@@ -25,6 +28,7 @@ export function MapView() {
         <ProjectLayers />
         <DrawControl />
         <MapController />
+        <MapResizer trigger={isCollapsed} /> 
       </MapContainer>
 
       {isLoading && (

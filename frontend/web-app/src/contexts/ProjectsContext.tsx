@@ -18,6 +18,8 @@ interface ProjectsContextValue {
   setDrawnGeometry: (geometry: Geometry | null) => void;
   selectedProject: Project | null;
   setSelectedProject: (project: Project | null) => void;
+  isCollapsed: boolean;
+  setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProjectsContext = createContext<ProjectsContextValue | undefined>(

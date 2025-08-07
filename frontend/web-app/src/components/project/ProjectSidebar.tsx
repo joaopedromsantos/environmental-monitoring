@@ -13,10 +13,10 @@ import { ProjectList } from './ProjectList';
 import { NewProjectModal } from './ProjectModal';
 
 export function ProjectSidebar() {
-  const { projects, statusCounts, isLoading, error, handleCreateProject } =
+  const { projects, statusCounts, isLoading, error, handleCreateProject, isCollapsed, setIsCollapsed } =
     useProjectsContext();
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
