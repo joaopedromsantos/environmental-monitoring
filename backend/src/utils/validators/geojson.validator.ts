@@ -73,7 +73,7 @@ export class IsGeoJSONConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(_args: ValidationArguments) {
-    return 'O campo $property deve ser um objeto GeoJSON válido (Point, LineString ou Polygon) com a estrutura de coordenadas correta.';
+    return 'O campo $property deve ser um objeto GeoJSON válido';
   }
 }
 

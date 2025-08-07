@@ -40,9 +40,9 @@ export class ProjectsService {
       .getRawMany();
 
     const statusCounts = {
-      [ProjectStatus.ATIVO]: 0,
-      [ProjectStatus.PENDENTE]: 0,
-      [ProjectStatus.FINALIZADO]: 0,
+      [ProjectStatus.ACTIVE]: 0,
+      [ProjectStatus.PENDING]: 0,
+      [ProjectStatus.FINISHED]: 0,
     };
 
     statusCountsResult.forEach((item) => {

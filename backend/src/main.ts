@@ -8,8 +8,15 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') || 3000;
+  const corsOrigin = configService.get<number>('CORS_ORIGIN') || 'http://localhost:3000';
 
   app.setGlobalPrefix('api');
+
+  app.enableCors({
+    origin: corsOrigin,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
